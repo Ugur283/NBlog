@@ -5,7 +5,12 @@ const path = require('path')
 
 
 router.get('/new' , (req, res) =>{
-    res.render('site2/addpost')
+    if(req.session.userId){
+        return res.render('site2/addpost')
+    }
+
+    res.redirect('/users/login')
+
 })
 
 router.get('/:id' , (req, res) =>{
@@ -24,10 +29,15 @@ router.post('/test' , (req, res) =>{
 
     Post.create({
         ...req.body,
-        post_image:`/public/img/postimages/${post_image.name}`
-    })
+        post_image:`/img/postimages/${post_image.name}`
+    }, )
 
-    res.redirect('/')
+    req.session.sessionFlash = {
+        type: 'alert alert-success',
+        message: 'Postunuz Oluşturuldu'
+    }
+
+    res.redirect('/blog')
 })
 
 

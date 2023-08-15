@@ -5,6 +5,7 @@ const Post = require('../models/Post')
 
 
 router.get('/' , (req, res) =>{
+    console.log(req.session)
     res.render('site2/index')
 })
 
@@ -25,13 +26,6 @@ router.get('/contact' , (req, res) =>{
     res.render('site2/contact')
 })
 
-router.get('/login' , (req, res) =>{
-    res.render('site2/login')
-})
-
-router.get('/register' , (req, res) =>{
-    res.render('site2/register')
-})
 
 
 
