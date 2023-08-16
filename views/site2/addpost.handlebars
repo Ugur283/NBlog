@@ -38,6 +38,14 @@
 							</div>
 
 							<div class="form-group">
+								<select class="form-control" name="category">
+									{{#each categories}}
+										<option value="{{_id}}">{{name}}</option>
+									{{/each}}
+								</select>
+							</div>
+
+							<div class="form-group">
 								<input class="form-control" name="post_image" type="file" required="required" data-validation-required-message="Please enter your Username">
 								<p class="help-block text-danger"></p>
 							</div>
