@@ -7,7 +7,7 @@ const hostname = "127.0.0.1";
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
-const generateDate = require("./helpers/generateDate").generateDate;
+const {generateDate, limit, truncate} = require("./helpers/hbs")
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const methodOverride = require('method-override')
@@ -27,12 +27,6 @@ app.use(
   })
 );
 
-// Flash massage Middleware
-app.use((req, res, next) => {
-  res.locals.sessionFlash = req.session.sessionFlash;
-  delete req.session.sessionFlash;
-  next();
-});
 
 app.use(fileUpload());
 app.use(express.static("public"));
@@ -40,10 +34,19 @@ app.use(methodOverride('_method'))
 
 
 
-app.engine(
-  "handlebars",
-  exphbs.create({ helpers: { generateDate: generateDate } }).engine
-);
+
+
+// handlebars helpers
+const hbs = exphbs.create({
+  helpers: {
+    generateDate: generateDate ,
+    limit: limit,
+    truncate:truncate 
+  }
+})
+
+
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
 // parse application/x-www-form-urlencoded
@@ -67,6 +70,15 @@ app.use((req, res, next) => {
   }
   next()
 });
+
+
+// Flash massage Middleware
+app.use((req, res, next) => {
+  res.locals.sessionFlash = req.session.sessionFlash;
+  delete req.session.sessionFlash;
+  next();
+});
+
 
 const main = require("./routes/main");
 const posts = require("./routes/posts");
